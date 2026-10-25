@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>개발자 이력서</title>
+    <meta name="description" content="사용자 경험을 생각하는 프론트엔드 개발자 홍길동의 이력서입니다." />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f6fb" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a12" />
+
+    <!-- 테마 초기화: 화면이 그려지기 전에 실행해 깜빡임(FOUC)을 방지 -->
+    <script>
+      document.documentElement.classList.add('js');
+      try {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (error) {
+        // localStorage 접근이 막힌 환경에서는 기본(라이트) 테마 사용
+      }
+    </script>
+
+    <!-- Pretendard 가변 웹폰트 (한글 가독성) -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+
+    <!-- TailwindCSS Play CDN (개발용, 배포 전 CLI 빌드로 전환 권장) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Tailwind 전용 설정: html.dark 클래스 기준으로 dark: 변형 적용 -->
+    <style type="text/tailwindcss">
+      @custom-variant dark (&:where(.dark, .dark *));
+
+      /* 디자인 토큰: 실제 색상 값은 style.css의 CSS 변수에서 라이트/다크별로 정의 */
+      @theme inline {
+        --color-paper: var(--paper);
+        --color-surface: var(--surface);
+        --color-ink: var(--ink);
+        --color-ink-soft: var(--ink-soft);
+        --color-line: var(--line);
+        --color-accent: var(--accent);
+        --color-accent-2: var(--accent-2);
+        --color-accent-soft: var(--accent-soft);
+        --font-display: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui, sans-serif;
+      }
+    </style>
+
+    <!-- 커스텀 스타일 (Tailwind 이후에 로드) -->
+    <link rel="stylesheet" href="src/css/style.css" />
+
+    <!-- 메인 스크립트 -->
+    <script src="src/js/main.js" defer></script>
+  </head>
+  <body class="bg-paper font-display text-ink antialiased">
+    <!-- 상단 고정 바: 로고, 내비게이션, 다크모드 토글 (스크롤해도 항상 보임) -->
+    <div class="topbar">
+      <nav aria-label="주요 메뉴" class="mx-auto flex max-w-3xl flex-wrap items-center gap-x-2 px-5 py-3 text-sm sm:px-6">
+        <a href="#top" class="mr-2 font-bold tracking-tight sm:mr-6">홍길동</a>
+
+        <!-- 모바일 메뉴 버튼 (sm 이상에서는 숨김) -->
+        <button
+          type="button"
+          id="menu-toggle"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+          class="btn-ghost btn-sm lift ml-auto font-medium sm:hidden"
+        >
+          메뉴
+        </button>
+
+        <ul
+          id="nav-menu"
+          class="order-last hidden basis-full flex-col gap-1 pt-3 sm:order-none sm:flex sm:basis-auto sm:flex-row sm:pt-0"
+        >
+          <li><a href="#about" class="block rounded-full px-3 py-1.5 text-ink-soft hover:text-ink">소개</a></li>
+          <li><a href="#skills" class="block rounded-full px-3 py-1.5 text-ink-soft hover:text-ink">기술 스택</a></li>
+          <li><a href="#experience" class="block rounded-full px-3 py-1.5 text-ink-soft hover:text-ink">경력</a></li>
+          <li><a href="#projects" class="block rounded-full px-3 py-1.5 text-ink-soft hover:text-ink">프로젝트</a></li>
+          <li><a href="#education" class="block rounded-full px-3 py-1.5 text-ink-soft hover:text-ink">학력</a></li>
+          <li><a href="#contact" class="block rounded-full px-3 py-1.5 text-ink-soft hover:text-ink">연락처</a></li>
+        </ul>
+
+        <!-- 다크모드 토글: 라이트에서는 달, 다크에서는 해 아이콘 (CSS로 전환) -->
+        <button
+          type="button"
+          id="theme-toggle"
+          aria-label="다크모드 전환"
+          aria-pressed="false"
+          class="btn-ghost btn-icon lift sm:ml-auto"
+        >
+          <svg class="icon-moon h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg class="icon-sun h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </svg>
+        </button>
+      </nav>
+    </div>
+
+    <!-- 히어로: 큰 이름, 한 줄 소개, 버튼 -->
+    <header id="top" class="mx-auto max-w-3xl px-5 py-16 text-center sm:px-6 sm:py-24">
+      <p class="chip text-xs uppercase tracking-wider">portfolio</p>
+      <h1 class="gradient-text mt-6 text-5xl font-extrabold leading-tight tracking-tight sm:text-7xl">홍길동</h1>
+      <p class="mt-3 text-xl font-medium text-ink-soft sm:text-2xl">Frontend Developer</p>
+      <p class="mx-auto mt-4 max-w-md text-base text-ink-soft sm:text-lg">사용자 경험을 생각하는 프론트엔드 개발자입니다.</p>
+
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="#projects" class="btn-primary lift">프로젝트 보기 ↘</a>
+        <a href="#contact" class="btn-ghost lift">연락하기</a>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-3xl space-y-6 px-5 pb-16 sm:space-y-8 sm:px-6 sm:pb-24">
+      <!-- 소개 -->
+      <section id="about" aria-labelledby="about-title" class="glass reveal">
+        <h2 id="about-title" class="section-title">소개</h2>
+        <p class="leading-relaxed text-ink-soft">
+          사용자 경험을 중요하게 생각하는 프론트엔드 개발자입니다.
+          웹 표준과 접근성을 지키며 읽기 쉬운 코드를 작성하려고 노력합니다.
+        </p>
+      </section>
+
+      <!-- 기술 스택 -->
+      <section id="skills" aria-labelledby="skills-title" class="glass reveal">
+        <h2 id="skills-title" class="section-title">기술 스택</h2>
+        <ul class="flex flex-wrap gap-2">
+          <li class="chip text-sm">HTML5</li>
+          <li class="chip text-sm">CSS3</li>
+          <li class="chip text-sm">JavaScript (ES6+)</li>
+          <li class="chip text-sm">TailwindCSS</li>
+          <li class="chip text-sm">Git / GitHub</li>
+        </ul>
+      </section>
+
+      <!-- 경력 (최근순) -->
+      <section id="experience" aria-labelledby="experience-title" class="glass reveal">
+        <h2 id="experience-title" class="section-title">경력</h2>
+        <div class="space-y-6">
+          <article>
+            <h3 class="text-lg font-semibold">ABC 소프트웨어</h3>
+            <p class="text-sm text-ink-soft">
+              프론트엔드 개발자 ·
+              <time datetime="2022-03">2022.03</time> ~ 현재
+            </p>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-ink-soft marker:text-accent">
+              <li>사내 관리자 웹 서비스 UI 개발 및 유지보수</li>
+              <li>반응형 레이아웃 도입으로 모바일 사용성 개선</li>
+            </ul>
+          </article>
+          <article>
+            <h3 class="text-lg font-semibold">XYZ 스튜디오</h3>
+            <p class="text-sm text-ink-soft">
+              웹 퍼블리셔 ·
+              <time datetime="2020-01">2020.01</time> ~
+              <time datetime="2022-02">2022.02</time>
+            </p>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-ink-soft marker:text-accent">
+              <li>기업 홍보 사이트 퍼블리싱</li>
+              <li>웹 접근성 기준에 맞춘 마크업 작업</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- 프로젝트 -->
+      <section id="projects" aria-labelledby="projects-title" class="glass reveal">
+        <h2 id="projects-title" class="section-title">프로젝트</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <article class="glass-inner lift">
+            <h3 class="text-lg font-semibold">할 일 관리 앱</h3>
+            <p class="mt-2 text-ink-soft">JavaScript로 만든 할 일 관리 웹 앱입니다. 로컬 스토리지에 데이터를 저장합니다.</p>
+            <p class="mt-2 text-sm text-ink-soft">사용 기술: HTML, CSS, JavaScript</p>
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="link-underline mt-4 inline-block text-sm">GitHub 보기</a>
+          </article>
+          <article class="glass-inner lift">
+            <h3 class="text-lg font-semibold">날씨 대시보드</h3>
+            <p class="mt-2 text-ink-soft">공개 API로 도시별 날씨를 보여주는 대시보드입니다.</p>
+            <p class="mt-2 text-sm text-ink-soft">사용 기술: HTML, TailwindCSS, JavaScript</p>
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="link-underline mt-4 inline-block text-sm">GitHub 보기</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- 학력 -->
+      <section id="education" aria-labelledby="education-title" class="glass reveal">
+        <h2 id="education-title" class="section-title">학력</h2>
+        <article>
+          <h3 class="text-lg font-semibold">한국대학교</h3>
+          <p class="text-sm text-ink-soft">
+            컴퓨터공학 학사 ·
+            <time datetime="2016-03">2016.03</time> ~
+            <time datetime="2020-02">2020.02</time>
+          </p>
+        </article>
+      </section>
+
+      <!-- 연락처 -->
+      <section id="contact" aria-labelledby="contact-title" class="glass reveal">
+        <h2 id="contact-title" class="section-title">연락처</h2>
+        <ul class="space-y-2 text-ink-soft">
+          <li>이메일: <a href="mailto:hong@example.com" class="link-underline">hong@example.com</a></li>
+          <li>
+            GitHub:
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="link-underline">github.com</a>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="mx-auto max-w-3xl px-5 py-10 text-center text-ink-soft sm:px-6">
+      <p><small>&copy; 2026 홍길동. All rights reserved.</small></p>
+    </footer>
+  </body>
+</html>

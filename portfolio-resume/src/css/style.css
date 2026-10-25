@@ -1,0 +1,296 @@
+/* 커스텀 스타일
+ * Tailwind 유틸리티로 표현하기 어려운 스타일만 여기에 작성한다.
+ * (Tailwind 전용 문법은 index.html의 <style type="text/tailwindcss">에 작성)
+ * 주의: 이 파일은 레이어 밖이라 Tailwind 유틸리티보다 우선한다.
+ *       같은 속성을 유틸리티로도 지정하지 않도록 역할을 나눈다.
+ */
+
+/* 디자인 토큰 값: 라이트 테마 (유리 표면 + 인디고/바이올렛 포인트) */
+:root {
+  color-scheme: light;
+  --paper: #f6f6fb;
+  --surface: rgba(255, 255, 255, 0.65);
+  --surface-solid: #ffffff;
+  --ink: #14142b;
+  --ink-soft: #55556f;
+  --line: rgba(20, 20, 43, 0.1);
+  --accent: #4f46e5;
+  --accent-2: #7c3aed;
+  --accent-soft: rgba(79, 70, 229, 0.1);
+  --glow-1: rgba(99, 102, 241, 0.28);
+  --glow-2: rgba(168, 85, 247, 0.22);
+  --glow-3: rgba(236, 72, 153, 0.16);
+  --shadow-card: 0 1px 2px rgba(20, 20, 43, 0.04), 0 12px 32px -12px rgba(20, 20, 43, 0.12);
+
+  /* 반경과 간격 토큰: 모든 영역에서 같은 값을 쓴다 */
+  --radius-card: 1.5rem;
+  --radius-inner: 1rem;
+  --space-card: 1.5rem;
+}
+
+/* 디자인 토큰 값: 다크 테마 (카드도 어두운 유리 표면으로 통일) */
+.dark {
+  color-scheme: dark;
+  --paper: #0a0a12;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-solid: #16161f;
+  --ink: #f4f4fa;
+  --ink-soft: #a3a3ba;
+  --line: rgba(255, 255, 255, 0.1);
+  --accent: #818cf8;
+  --accent-2: #a78bfa;
+  --accent-soft: rgba(129, 140, 248, 0.16);
+  --glow-1: rgba(99, 102, 241, 0.22);
+  --glow-2: rgba(168, 85, 247, 0.16);
+  --glow-3: rgba(236, 72, 153, 0.1);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px -16px rgba(0, 0, 0, 0.6);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --space-card: 2rem;
+  }
+}
+
+/* 앵커 이동 시 부드러운 스크롤 (상단 바에 가려지지 않도록 여백 확보) */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+/* 테마 전환 시 색이 부드럽게 바뀌도록 */
+body,
+.glass,
+.topbar,
+.chip,
+.btn-ghost {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* 배경 글로우: 화면에 고정된 흐릿한 그라데이션 3개 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40rem 32rem at 12% -8%, var(--glow-1), transparent 70%),
+    radial-gradient(36rem 30rem at 92% 8%, var(--glow-2), transparent 70%),
+    radial-gradient(40rem 32rem at 50% 108%, var(--glow-3), transparent 70%);
+}
+
+/* 유리 카드: 섹션과 중첩 카드가 공유하는 표면 */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-card);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* 블러를 지원하지 않는 브라우저에서는 불투명하게 해서 글자 대비를 지킨다 */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .topbar {
+    background: var(--surface-solid);
+  }
+}
+
+/* 카드 안에 들어가는 작은 카드 (프로젝트 등) */
+.glass-inner {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-inner);
+  padding: 1.25rem;
+}
+
+/* 섹션 제목: 작은 포인트 막대 + 큰 제목으로 h3보다 위계를 높인다 */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.section-title::before {
+  content: '';
+  width: 0.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+}
+
+@media (min-width: 640px) {
+  .section-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* 작은 라벨 칩: 기술 스택, 히어로 라벨 */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: 9999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* 버튼: 기본(그라데이션)과 보조(유리) */
+.btn-primary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #ffffff;
+  box-shadow: 0 8px 24px -8px rgba(99, 102, 241, 0.6);
+}
+
+.btn-ghost {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* 모바일 메뉴 버튼은 sm 이상에서 숨긴다
+ * (.btn-ghost의 display가 Tailwind의 sm:hidden보다 우선해서 직접 지정)
+ */
+@media (min-width: 640px) {
+  #menu-toggle {
+    display: none;
+  }
+}
+
+/* 상단 바용 작은 버튼 크기 (padding을 유틸리티로 덮어쓸 수 없어서 별도 클래스로 둔다) */
+.btn-sm {
+  padding: 0.375rem 0.875rem;
+}
+
+.btn-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+}
+
+/* 본문 링크: 반복되던 밑줄 스타일을 하나로 */
+.link-underline {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.link-underline:hover {
+  color: var(--accent);
+}
+
+/* 히어로 이름용 그라데이션 글씨 */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 55%, #db2777 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 호버 시 살짝 떠오르는 효과 */
+.lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lift:hover {
+  transform: translateY(-2px);
+}
+
+/* sticky 상단 바: 스크롤해도 항상 보이도록, 뒤가 비치는 유리 효과 */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* 현재 보고 있는 섹션의 내비게이션 링크 강조 */
+nav a[aria-current='true'] {
+  color: var(--accent);
+  font-weight: 600;
+  background: var(--accent-soft);
+}
+
+/* 테마 토글 아이콘: 라이트에서는 달, 다크에서는 해를 보여준다 */
+.icon-sun {
+  display: none;
+}
+
+.dark .icon-sun {
+  display: block;
+}
+
+.dark .icon-moon {
+  display: none;
+}
+
+/* 키보드 포커스 표시 */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 섹션 등장 애니메이션
+ * JS가 켜져 있을 때(html.js)만 숨겨서, JS 실패 시에도 내용이 보이도록 한다.
+ */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* 움직임 줄이기 설정을 존중 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body,
+  .glass,
+  .topbar,
+  .chip,
+  .btn-ghost,
+  .lift {
+    transition: none;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
